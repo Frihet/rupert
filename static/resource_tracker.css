@@ -1,0 +1,28 @@
+.main_menu_inner
+{
+    background-color: #01245C;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-image: url('ppl2.jpg');
+}
+
+body .main_menu a
+{
+    color: white;
+}
+
+.main_menu .logo {
+    font-weight:bold;
+    padding-bottom:7.5em;
+    padding-top:0.5em;
+    
+}
+
+.date_input {
+    width:7em;
+    margin-right: 2px;
+}
+
+.usage_input {
+    width: 3em;
+}
