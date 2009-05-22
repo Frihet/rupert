@@ -4,6 +4,14 @@
     background-repeat: no-repeat;
     background-position: bottom right;
     background-image: url('ppl2.jpg');
+    height: 150px;
+    position: relative;
+}
+
+body .main_menu ul
+{
+    position: absolute;
+    bottom:0.5em;
 }
 
 body .main_menu a
@@ -12,12 +20,10 @@ body .main_menu a
 }
 
 .main_menu .logo {
+    padding: 0px;
     font-weight:bold;
-    padding-bottom:7.5em;
-    padding-top:0.5em;
-    
+    padding:0em;
 }
-
 .date_input {
     width:7em;
     margin-right: 2px;
@@ -26,3 +32,4 @@ body .main_menu a
 .usage_input {
     width: 3em;
 }
+
