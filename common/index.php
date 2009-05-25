@@ -26,9 +26,11 @@
 
 $start_time = microtime(true);
 
+define('IS_MAIN_PAGE', 1);
+
 require_once("common/util/util.php");
 require_once("common/util/db.php");
-require_once("install.php");
+require_once("common/install.php");
 
 require_once("config.php");
 require_once("common/util/plugin.php");
@@ -202,7 +204,7 @@ skin : "fc"*/
 }
 
 if(!db::init(DB_DSN)) {
-    FreeCMDB::writeMessages();
+    //FreeCMDB::writeMessages();
     die("The site is down. Could not connect to the database.");
 }
 

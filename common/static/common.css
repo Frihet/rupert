@@ -324,10 +324,26 @@ Stykling for installation screen
 
 .content_install
 {
-    background-color: white;
     margin: 1%;
     padding: 0%;
 }
+
+.content_install_inner
+{
+    background-color: white;
+    padding: 1em;
+    margin: 0%;
+    border: 1px solid #000;
+
+	border-radius-top-left: 6px;
+    -moz-border-radius-topleft: 6px;
+	-webkit-border-radius-top-left: 6px;
+
+	border-radius-top-right: 10px;
+    -moz-border-radius-topright: 10px;
+	-webkit-border-radius-top-right: 10px;
+}
+
 
 /*
   Styling of the main menu at the top
