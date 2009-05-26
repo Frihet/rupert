@@ -24,10 +24,6 @@ extends Application
     {
         $res = null;
         
-        if(! (@include_once 'Image/GraphViz.php') || !class_exists("Image_GraphViz")) {
-            $res[] = "<span class='error'>The Image_Graphviz library is missing. You can install it by writing <code>pear install Image_Graphviz</code> at the command line.</span>";
-        }
-
         if(!class_exists("PDO")) {
             $res[] = "<span class='error'>The PDO library is missing. You can install it by writing <code>pecl install PDO</code> at the command line.</span>";
         }

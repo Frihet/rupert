@@ -74,15 +74,14 @@ class Controller
         echo "<div class='content'>";
         echo "<div class='content_inner'>";
 
-		echo "<h1>" . htmlEncode(util::getTitle()). "</h1>";
-		
-		echo implode("",$this->getContent("content_pre"));
-
+        echo "<h1>" . htmlEncode(util::getTitle()). "</h1>";
+	
+        echo implode("",$this->getContent("content_pre"));
+        
         echo $content;
-
-		echo implode("",$this->getContent("content_post"));
-		
-
+        
+        echo implode("",$this->getContent("content_post"));
+	
         echo "<div class='content_post'>";
         echo "</div>";
         echo "</div>";
