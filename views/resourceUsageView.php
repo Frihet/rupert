@@ -9,10 +9,9 @@ class resourceUsageView
             util::setTitle("Update resource usage");
 
             $form = "<p>\n\n";
-            
-            
+                        
             $hidden = array('task'=>'save');
-
+            
             $resource_select = form::makeSelect("resource_id", Resource::findAll(), null);
             $start = form::makeText('start', "", 'start','date_input');
             $start .= '<script type="text/javascript">
@@ -42,6 +41,7 @@ $(function()
 ';
             $usage = form::makeText('usage', "",null,'usage_input');
             $description = form::makeText('description','');
+            $type_select = form::makeSelect("type_id", form::makeSelectList(Type::findAll(),'id','name'), null);
             $form .= "
 
 <table>
@@ -62,6 +62,9 @@ Usage
 Description
 </th>
 <th>
+Type
+</th>
+<th>
 </th>
 </tr>
 <tr>
@@ -79,6 +82,9 @@ $usage
 </td>
 <td>
 $description
+</td>
+<td>
+$type_select
 </td>
 <td>
 <button type='submit'>Add</button>
@@ -121,6 +127,9 @@ Usage
 Description
 </th>
 <th>
+Type
+</th>
+<th>
 </th>
 </tr>
 ";
@@ -131,9 +140,11 @@ Description
                     $stop = $usg['stop'];
                     $usage = $usg['usage'];
                     $desc = htmlEncode($usg['description']);
-                    $remove = makeLink(makeURL(array('task'=>'removeUsage', 'usage_id'=>$usg['id'])), 'remove');
+                    $type = htmlEncode(type::getType($usg['type_id'])->name);
+                    $remove = makeLink(makeURL(array('task'=>'remove', 'id'=>$usg['id'])), 'remove');
+                    $edit = makeLink(makeURL(array('task'=>'edit', 'id'=>$usg['id'])), 'edit');
                     
-                    $form .= "<tr><td>$start</td><td>$stop</td><td>$usage</td><td>$desc</td><td>$remove</td></tr>";
+                    $form .= "<tr><td>$start</td><td>$stop</td><td>$usage</td><td>$desc</td><td>$type</td><td>$remove $edit</td></tr>";
                     
                 }
                 

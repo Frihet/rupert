@@ -64,6 +64,7 @@ class reportView
 ResourceTracker.data = '.json_encode($resources).';
 ResourceTracker.start = Date.fromString("'.$start.'");
 ResourceTracker.stop = Date.fromString("'.$stop.'");
+ResourceTracker.type = '.json_encode(Type::findAll()).';
 ResourceTracker.initData();
 ResourceTracker.plotAll();
 </script>

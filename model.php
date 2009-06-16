@@ -1,6 +1,40 @@
 <?php
 
 
+class ResourceUsage
+extends DbItem
+{
+    var $id;
+    var $start;
+    var $stop;
+    var $usage;
+    var $description;
+    var $type_id;
+    
+    function __construct($param=null) 
+    {
+        if ((int)$param == $param) {
+            $id = $param;
+            $data = db::fetchRow("
+select id, start, stop, usage, description, type_id
+from rt_resource_usage 
+where id = :id", array(":id"=>$id));
+            
+            $this->initFromArray($data);
+        }
+        else if (is_array($param)) {
+                $this->initFromArray($param);
+        }
+    }
+    
+    function save() 
+    {
+        return $this->saveInternal('rt_resource_usage');
+    }
+    
+}
+
+
 class Resource
 extends DbItem
 {
@@ -17,39 +51,32 @@ extends DbItem
         }
     }
     
-    
     function getAvailability()
     {
         if( $this->_resource_usage === null) {
             $this->_resource_usage = db::fetchList("
-select id, start, stop, usage, description
-from rt_resource_usage 
-where resource_id = :id", array(":id"=>$this->id));
+select ru.id, ru.start, ru.stop, ru.usage, ru.description, ru.type_id
+from rt_resource_usage ru
+join rt_type t
+on ru.type_id = t.id
+where ru.resource_id = :id", array(":id"=>$this->id));
         }
     }
 
-    function addUsage($start, $stop, $usage, $description) 
+    function addUsage($start, $stop, $usage, $description, $type_id) 
     {
-        db::query("insert into rt_resource_usage (resource_id, start, stop, usage, description) values (:id, :start, :stop, :usage, :description)",
+        db::query("insert into rt_resource_usage (resource_id, start, stop, usage, description, type_id) values (:id, :start, :stop, :usage, :description, :type_id)",
                   array(':id'=>$this->id,
                         ':start'=>$start,
                         ':stop'=>$stop,
                         ':usage'=>$usage,
-                        ':description'=>$description));
+                        ':description'=>$description,
+                        ':type_id'=>$type_id));
     }
-    
+
     function save()
     {
-        if($this->id !== null) {
-            db::query('update rt_resource set name=:name where id=:id',
-                      array(':name'=>$this->name,
-                            ':id'=>$this->id));
-        } else {
-            db::query('insert into rt_resource (name) values (:name)',
-                      array(':name'=>$this->name));
-            $this->id = db::lastInsertId("rt_resource_id_seq");
-        }
-
+        return $this->saveInternal('rt_resource');
         if ($this->_tags !== null) {
             
             db::query('delete from rt_resource_tag where resource_id = :id',
@@ -135,7 +162,6 @@ order by r.name
     function removeUsage($id) 
     {
         db::query('delete from rt_resource_usage where id=:id', array(':id'=>$id));
-        
     }
     
 
@@ -169,6 +195,60 @@ extends DbItem
     function getDescription()
     {
         return $this->description;
+    }
+}
+
+
+class Type
+extends DbItem
+{
+    var $id;
+    var $name;
+    var $color;
+    
+    static $_all=null;
+    
+    function findAll()
+    {
+        if (self::$_all !== null) {
+            return self::$_all;
+        }
+        
+
+        $resources = db::fetchList("select * from rt_type order by name");
+        $res=array();
+        foreach( $resources as $resource_arr) {
+            $r = new Type();
+            $r->initFromArray($resource_arr);
+            $res[] = $r;
+        }
+        self::$_all = $res;
+        
+        return $res;
+    }
+
+    function getType($id) 
+    {
+        $all = self::findAll();
+        foreach($all as $el) {
+            if ($el->id == $id) {
+                return $el;
+            }
+            
+        }
+        return null;
+        
+    }
+    
+
+    function getId()
+    {
+        return $this->id;
+    }
+    
+    function getName()
+    {
+        return $this->name;
     }
 }
 
