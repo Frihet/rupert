@@ -23,11 +23,18 @@ class resourceView
         $tags = Tag::findAll();
 
         
-        foreach(Resource::findAll() as $resource) {
-            $text = form::makeText("name_$i", $resource->name);
+        foreach(array_merge(Resource::findAll(),array(new Resource())) as $resource) {
+            $remove = "";
+            
+            if($resource->id!==null) {
+                $hidden["resource[$i][id]"] = $resource->id;
+                $remove = form::makeButton('Remove',"resource[$i][remove]","1");
+            }
+            
+
+            $text = form::makeText("resource[$i][name]", $resource->name);
             $hidden["id_$i"] = $resource->id;
-            $sel = form::makeSelect("tag_$i", $tags, $resource->getTags());
-            $remove = form::makeButton('Remove',"remove_$i","1");
+            $sel = form::makeSelect("resource[$i][_tags]", $tags, $resource->getTags());
             
             $form .= "<tr>
 <td>
@@ -43,22 +50,6 @@ $remove
                 
             $i++;
         }
-        
-        $text = form::makeText("name_new", "");
-        $sel = form::makeSelect("tag_new", $tags, array());
-        
-        $form .= "<tr>
-<td>
-$text
-</td>
-<td>
-$sel
-</td>
-<td>
-</td>
-</tr>";
-                
-            
         
         $form .= "
 </table>

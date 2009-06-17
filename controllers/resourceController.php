@@ -17,29 +17,17 @@ class resourceController
         echo "<pre>".sprint_r($_REQUEST)."</pre>";
         die('lalala');
         */
-
-        $i = 0;
-        while(($id = param("id_$i")) !== null) {
-
-            $r = new Resource(array("id"=>$id, "name"=>param("name_$i")));
-
-            if(param("remove_$i",0) == 1) {
-                $r->remove();
-            }
-            else {
-                $r->setTags(param("tag_$i"));
-        
-                $r->save();
-            }
+        foreach(param('resource') as $arr) {
             
-            $i++;
-        }
-
-        $new_name = param("name_new");
-        if($new_name) {
-            $r = new Resource(array("name"=>$new_name));
-            $r->setTags(param("tag_new"));
-            $r->save();            
+            $obj = new Resource($arr);
+            
+            if($arr['remove']) {
+                $obj->remove();
+            }
+            else if($obj->name != "") {
+                $obj->setTags($arr['_tags']);
+                $obj->save();
+            }
         }
 
         foreach(param('type') as $type_arr) {

@@ -36,7 +36,7 @@ extends DbItem
 {
     var $id;
     var $name;
-
+    
     var $_resource_usage=null;
     var $_tags = null;
     
@@ -44,7 +44,12 @@ extends DbItem
     {
         $this->table = 'rt_resource';
         if($param) {
-            $this->initFromArray($param);
+            if ((int)$param == $param) {
+                $this->load($param);
+            }
+            else if (is_array($param)) {
+                $this->initFromArray($param);
+            }
         }
     }
     
@@ -73,16 +78,25 @@ where ru.resource_id = :id", array(":id"=>$this->id));
 
     function save()
     {
-        return $this->saveInternal();
+        db::begin();
+        
+        $ok = $this->saveInternal();
         if ($this->_tags !== null) {
-            db::query('delete from rt_resource_tag where resource_id = :id',
+            $ok &= db::query('delete from rt_resource_tag where resource_id = :id',
                       array(':id'=>$this->id));
             foreach($this->_tags as $tag_id) {
-                db::query('insert into rt_resource_tag (resource_id, tag_id) values (:resource_id, :tag_id)',
+                $ok &= db::query('insert into rt_resource_tag (resource_id, tag_id) values (:resource_id, :tag_id)',
                           array(':tag_id'=>$tag_id,
                                 ':resource_id'=>$this->id));
             }
         }
+        if( $ok) {
+            db::commit();
+        }
+        else {
+            db::rollback();
+        }
+        
     }
         
     function find($id)
