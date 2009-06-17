@@ -13,14 +13,10 @@ extends DbItem
     
     function __construct($param=null) 
     {
+        $this->table = 'rt_resource_usage';
+        
         if ((int)$param == $param) {
-            $id = $param;
-            $data = db::fetchRow("
-select id, start, stop, usage, description, type_id
-from rt_resource_usage 
-where id = :id", array(":id"=>$id));
-            
-            $this->initFromArray($data);
+            $this->load($param);
         }
         else if (is_array($param)) {
                 $this->initFromArray($param);
@@ -29,7 +25,7 @@ where id = :id", array(":id"=>$id));
     
     function save() 
     {
-        return $this->saveInternal('rt_resource_usage');
+        return $this->saveInternal();
     }
     
 }
@@ -46,6 +42,7 @@ extends DbItem
     
     function __construct($param=null) 
     {
+        $this->table = 'rt_resource';
         if($param) {
             $this->initFromArray($param);
         }
@@ -76,9 +73,8 @@ where ru.resource_id = :id", array(":id"=>$this->id));
 
     function save()
     {
-        return $this->saveInternal('rt_resource');
+        return $this->saveInternal();
         if ($this->_tags !== null) {
-            
             db::query('delete from rt_resource_tag where resource_id = :id',
                       array(':id'=>$this->id));
             foreach($this->_tags as $tag_id) {
@@ -88,9 +84,7 @@ where ru.resource_id = :id", array(":id"=>$this->id));
             }
         }
     }
-    
-    
-    
+        
     function find($id)
     {
         return dbItem::find("id", $id, "Resource", "rt_resource");
@@ -134,7 +128,7 @@ order by r.name
         if($this->_tags !== null) {
             return $this->_tags;
         }
-                
+        
         $tags = db::fetchList("select tag_id from rt_resource_tag where resource_id = :id",
                               array(':id'=>$this->id));
         $this->_tags=array();
@@ -163,11 +157,13 @@ order by r.name
     {
         db::query('delete from rt_resource_usage where id=:id', array(':id'=>$id));
     }
-    
 
+    function remove() 
+    {
+        db::query('delete from rt_resource_usage where resource_id=:id', array(':id'=>$this->id));             $this->removeInternal();
+    }
+        
 }
-
-
 
 class Tag
 extends DbItem
@@ -175,6 +171,19 @@ extends DbItem
     var $id;
     var $description;
     
+    function __construct($param=null) 
+    {
+        $this->table = 'rt_tag';
+
+        if ((int)$param == $param) {
+            $this->load($param);
+        }
+        else if (is_array($param)) {
+            $this->initFromArray($param);
+        }
+    }
+
+
     function findAll()
     {
         $resources = db::fetchList("select * from rt_tag order by description");
@@ -196,6 +205,18 @@ extends DbItem
     {
         return $this->description;
     }
+    
+    function remove() 
+    {
+        $this->removeInternal();
+    }
+
+    function save() 
+    {
+        $this->saveInternal();
+    }
+
+
 }
 
 
@@ -208,6 +229,18 @@ extends DbItem
     
     static $_all=null;
     
+    function __construct($param=null) 
+    {
+        $this->table = 'rt_type';
+
+        if ((int)$param == $param) {
+            $this->load($param);
+        }
+        else if (is_array($param)) {
+            $this->initFromArray($param);
+        }
+    }
+
     function findAll()
     {
         if (self::$_all !== null) {
@@ -234,13 +267,10 @@ extends DbItem
             if ($el->id == $id) {
                 return $el;
             }
-            
         }
         return null;
-        
     }
     
-
     function getId()
     {
         return $this->id;
@@ -250,8 +280,18 @@ extends DbItem
     {
         return $this->name;
     }
+
+    function remove() 
+    {
+        $this->removeInternal();
+    }
+
+    function save() 
+    {
+        $this->saveInternal();
+    }
+
+ 
 }
-
-
 
 ?>

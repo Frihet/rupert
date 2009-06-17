@@ -12,6 +12,8 @@ extends Application
         $this->addScript('static/resource_tracker.js');
         $this->addScript('static/jquery.flot.js');
         $this->addStyle('static/resource_tracker.css');
+        $this->addScript('static/farbtastic.js');
+        $this->addStyle('static/farbtastic.css');
     }
     
     
@@ -26,7 +28,7 @@ extends Application
 	
         echo "<div class='main_menu'>\n";
         echo "<div class='main_menu_inner'>";
-        echo "<div class='logo'><a href='?'>Freecode Resource Tracker</a></div>";
+        echo "<div class='logo'><a href='?'>Rupert - The Freecode Resource Usage Planner</a></div>";
 		
         echo "<ul>\n";
         
