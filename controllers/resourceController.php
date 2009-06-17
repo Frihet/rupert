@@ -20,10 +20,18 @@ class resourceController
 
         $i = 0;
         while(($id = param("id_$i")) !== null) {
+
             $r = new Resource(array("id"=>$id, "name"=>param("name_$i")));
-            $r->setTags(param("tag_$i"));
+
+            if(param("remove_$i",0) == 1) {
+                $r->remove();
+            }
+            else {
+                $r->setTags(param("tag_$i"));
         
-            $r->save();
+                $r->save();
+            }
+            
             $i++;
         }
 

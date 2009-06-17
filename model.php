@@ -160,7 +160,7 @@ order by r.name
 
     function remove() 
     {
-        db::query('delete from rt_resource_usage where resource_id=:id', array(':id'=>$this->id));             $this->removeInternal();
+        db::query('delete from rt_resource_usage where resource_id=:id', array(':id'=>$this->id));             db::query('delete from rt_resource_tag where resource_id=:id', array(':id'=>$this->id));             $this->removeInternal();
     }
         
 }

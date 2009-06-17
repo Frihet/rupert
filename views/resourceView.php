@@ -16,6 +16,7 @@ class resourceView
 <tr>
 <th>Name</th>
 <th>Tags</th>
+<th></th>
 </tr>
 ";
         $i = 0;
@@ -26,6 +27,7 @@ class resourceView
             $text = form::makeText("name_$i", $resource->name);
             $hidden["id_$i"] = $resource->id;
             $sel = form::makeSelect("tag_$i", $tags, $resource->getTags());
+            $remove = form::makeButton('Remove',"remove_$i","1");
             
             $form .= "<tr>
 <td>
@@ -33,6 +35,9 @@ $text
 </td>
 <td>
 $sel
+</td>
+<td>
+$remove
 </td>
 </tr>";
                 
@@ -48,6 +53,8 @@ $text
 </td>
 <td>
 $sel
+</td>
+<td>
 </td>
 </tr>";
                 
@@ -71,8 +78,12 @@ $sel
         $i = 0;
         foreach(array_merge(Type::findAll(),array(new Type(array('color'=>'#000000')))) as $type) {
 
-            if($type->id!==null)
+            $remove = "";
+            
+            if($type->id!==null) {
                 $hidden["type[$i][id]"] = $type->id;
+                $remove = form::makeButton('Remove',"type[$i][remove]","1");
+            }
             
             $color = form::makeText("type[$i][color]", $type->color, "type_color_$i");
             
@@ -86,7 +97,6 @@ $sel
 ";
  
             $name = form::makeText("type[$i][name]", $type->name);
-            $remove = form::makeButton('Remove',"type[$i][remove]","1");
             
             $form .= "
 <tr>
@@ -121,11 +131,14 @@ $remove
         $i = 0;
         foreach(array_merge(Tag::findAll(),array(new Tag())) as $tag) {
             
-            if($tag->id!==null)
+            $remove = "";
+            
+            if($tag->id!==null) {
                 $hidden["tag[$i][id]"] = $tag->id;
+                $remove = form::makeButton('Remove',"tag[$i][remove]","1");
+            }
             
             $description = form::makeText("tag[$i][description]", $tag->description);
-            $remove = form::makeButton('Remove',"tag[$i][remove]","1");
             
             $form .= "
 <tr>
