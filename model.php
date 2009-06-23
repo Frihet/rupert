@@ -1,6 +1,5 @@
 <?php
 
-
 class ResourceUsage
 extends DbItem
 {
