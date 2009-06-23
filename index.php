@@ -9,9 +9,9 @@ extends Application
 
     function __construct()
     {
-        $this->addScript('static/resource_tracker.js');
+        $this->addScript('static/rupert.js');
         $this->addScript('static/jquery.flot.js');
-        $this->addStyle('static/resource_tracker.css');
+        $this->addStyle('static/rupert.css');
         $this->addScript('static/farbtastic.js');
         $this->addStyle('static/farbtastic.css');
     }
