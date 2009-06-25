@@ -16,7 +16,6 @@ extends Application
         $this->addStyle('static/farbtastic.css');
     }
     
-    
     /**
      Write out the top menu.
     */    
