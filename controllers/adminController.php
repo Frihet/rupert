@@ -7,6 +7,14 @@ class adminController
 extends Controller
 {
 
+    function __construct($app)
+    {
+        parent::__contruct($app);
+        $this->getApplication()->enableDatePicker();
+        
+    }
+    
+
 	function show($content)
 	{
             Controller::show(array(makeLink("?controller=resource", "Resources", null),
