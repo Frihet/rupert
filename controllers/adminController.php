@@ -11,7 +11,6 @@ extends Controller
     {
         parent::__contruct($app);
         $this->getApplication()->enableDatePicker();
-        
     }
     
 
